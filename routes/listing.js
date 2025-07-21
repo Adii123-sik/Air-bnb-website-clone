@@ -7,7 +7,7 @@ const {listingSchema,reviewSchema}=require("../schema.js");
 const Listing = require("../models/listing.js");
 
 
-
+// Middleware to validate listing data
 const validateListing =(req,res,next)=>{
     let {error}=listingSchema.validate(req.body);
     if(error){
@@ -20,8 +20,8 @@ const validateListing =(req,res,next)=>{
 };
 
 
-// index route
-
+//index route
+// Fetch all listings and render the index page
 router.get("/",wrapAsync( async(req,res)=>{
   const allListings=  await Listing.find({});
   res.render("Listings/index.ejs",{allListings});
@@ -30,8 +30,8 @@ router.get("/",wrapAsync( async(req,res)=>{
 
 
 
-// route for form of add new Listing
 
+// Render the form to create a new listing
 router.get("/new",(req,res)=>{
 
  res.render("Listings/new.ejs");    
@@ -40,7 +40,7 @@ router.get("/new",(req,res)=>{
 
 
 //show route
-
+// Fetch a specific listing by ID and render the show page
 router.get("/:id", wrapAsync( async (req,res)=>{
 
     let {id}=req.params;
@@ -55,6 +55,7 @@ router.get("/:id", wrapAsync( async (req,res)=>{
 }));
 
 //Create Route
+// Create a new listing and redirect to the index page
 router.post("/", validateListing, wrapAsync( async (req, res ,next) => {
   
    const newListing = new Listing(req.body.listing);
@@ -65,7 +66,7 @@ router.post("/", validateListing, wrapAsync( async (req, res ,next) => {
 }));
 
 //edit route
-
+// Fetch a specific listing by ID and render the edit form
 router.get("/:id/edit",wrapAsync( async (req,res)=>{
     let {id}=req.params;
     const listing=await Listing.findById(id);
@@ -76,6 +77,7 @@ router.get("/:id/edit",wrapAsync( async (req,res)=>{
 
 
 //Update Route
+// Update a specific listing by ID and redirect to the show page
 router.put("/:id", validateListing, wrapAsync( async (req, res) => {
   let { id } = req.params;
   await Listing.findByIdAndUpdate(id, { ...req.body.listing });
@@ -84,7 +86,7 @@ router.put("/:id", validateListing, wrapAsync( async (req, res) => {
 }));
 
 // delete listing route
-
+// Delete a specific listing by ID and redirect to the index page 
 router.delete("/:id", wrapAsync( async (req,res)=>{
     let {id}=req.params;
   await  Listing.findByIdAndDelete(id); 

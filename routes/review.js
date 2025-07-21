@@ -7,7 +7,7 @@ const Review=require("../models/review.js");
 const Listing = require("../models/listing.js");
 
 
-
+// Middleware to validate review data
 let validateReview = (req, res, next) => {
 
   let { error } = reviewSchema.validate(req.body);
@@ -24,7 +24,7 @@ let validateReview = (req, res, next) => {
 
 
 //post review route
-
+// Create a new review for a specific listing and redirect to the listing's show page
 router.post("/", validateReview, wrapAsync(async (req, res) => {
 
   let listing = await Listing.findById(req.params.id);
@@ -39,7 +39,7 @@ router.post("/", validateReview, wrapAsync(async (req, res) => {
 }));
 
 //delete review route
-
+// Delete a specific review by ID, remove it from the listing, and redirect to the listing's show page
 router.delete("/:reviewId", wrapAsync(async (req, res) => {
 
   let { id, reviewId } = req.params;

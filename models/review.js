@@ -22,8 +22,10 @@ const reviewSchema=new Schema({
 
 
 
-
+//  Defining the Review model
 
 const Review=mongoose.model("Review",reviewSchema);
+
+// Exporting the Review model   
 
 module.exports=Review;
