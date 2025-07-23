@@ -11,11 +11,18 @@
     <div class="card col-6 offset-3 show-card listing-card">
       <img src="<%=listing.image%>" class="card-img-top show-img" alt="listing_image">
       <div class="card-body">
+        <p class="card-text"> Owend by: 
+         <i> <%= listing.owner.username %></i> </p>
         <p class="card-text">
-          <%= listing.description %> <br>
+          <%= listing.description %>
+          </p> 
+        <p class="card-text">
             &#8377; <%= listing.price ? listing.price.toLocaleString("en-IN") : "Price not available" %> / Night
-              <br>
-              <%= listing.location %> <br>
+        </p>
+        <p class="card-text">
+              <%= listing.location %>
+        </p>
+        <p class="card-text">
                 <%= listing.country %>
         </p>
       </div>
@@ -24,6 +31,7 @@
     <br />
   </div>
 
+ <%if(currentUser && listing.owner._id.equals(currentUser._id)){ %>
   <div class="btns">
     <a href="/listings/<%= listing._id %>/edit" class="btn btn-dark col-1 offset-3 edit-btn">Edit</a>
 
@@ -33,9 +41,12 @@
       <button class="btn btn-dark  offset-5">Delete</button>
     </form>
   </div>
+  <% } %>
 
+ 
   <div class="col-8 offset-3 mb-3">
     <hr>
+    <%if(currentUser){ %>
     <h4>Leave a Review</h4>
     <form action="/listings/<%= listing.id %>/reviews" method="post" novalidate class="needs-validation">
       <div class="mb-3 mt-3">
@@ -51,8 +62,10 @@
 
       <button class="btn btn-outline-dark ">Submit</button>
     </form>
+<hr>
+    <%}%>
 
-    <hr>
+    
 
     <p><b>All Reviews</b></p>
 
@@ -64,7 +77,7 @@
       <% for(review of listing.reviews){ %>
         <div class="card col-5 ms-3 mb-3">
           <div class="card-body">
-            <h5 class="card-title">@lt.amansharma</h5>
+            <h5 class="card-title">@<%= review.author.username %></h5>
             <p class="card-text">
               <%=review.comment%>
             </p>
