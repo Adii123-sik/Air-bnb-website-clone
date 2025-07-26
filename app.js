@@ -18,6 +18,8 @@ const ejsMate = require("ejs-mate");
 const ExpressError = require("./utils/ExpressError.js");
 // Middleware for session management, flash messages, and user authentication
 const session=require("express-session");
+// MongoDB session store for Express
+const MongoStore = require('connect-mongo');
 // Middleware for flash messages
 const flash=require("connect-flash");
 // Passport.js for user authentication
@@ -43,10 +45,11 @@ app.use(express.json());
 app.use(methodOverride("_method"));
 app.engine("ejs", ejsMate);
 
-// MongoDB connection URL
-const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
+
+
+const dbURL=process.env.ATLASDB_URL;
 async function main() {
-  await mongoose.connect(MONGO_URL);
+  await mongoose.connect(dbURL);
 }
 main()
   .then((result) => {
@@ -56,10 +59,24 @@ main()
     console.log(err);
   });
 
+// Setting up the MongoDB session store
+  
+const store = MongoStore.create({
+  mongoUrl: dbURL,
+  crypto: {
+    secret: process.env.SECRET,
+  },
+  touchAfter: 24 * 3600, // time in seconds
+});
+
+store.on("error", function (e) {
+  console.log("session store error", e);
+});
+
 // Session configuration for user authentication
   const sessionOption={
-  
-  secret:"mysupersecretcode",
+  store:store,  
+  secret: process.env.SECRET,
   resave:false,
   saveUninitialized:true,
   cookie:{
@@ -69,11 +86,8 @@ main()
   }
 };
 
-// home route
 
-app.get("/", (req, res) => {
-  res.send("root request is working");
-});
+
 
 
 // Middleware for session management and flash messages
