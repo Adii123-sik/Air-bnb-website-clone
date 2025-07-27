@@ -47,6 +47,9 @@ app.engine("ejs", ejsMate);
 
 
 
+
+
+
 const dbURL=process.env.ATLASDB_URL;
 async function main() {
   await mongoose.connect(dbURL);
@@ -58,6 +61,11 @@ main()
   .catch((err) => {
     console.log(err);
   });
+
+
+  app.get("/", (req, res) => {
+  res.send("home.ejs");
+});
 
 //Setting up the MongoDB session store
   
@@ -138,4 +146,4 @@ app.use((err, req, res, next) => {
 });
 app.listen(port, () => {
   console.log(`server is listening on a port${port}`);
-}); 
+});
