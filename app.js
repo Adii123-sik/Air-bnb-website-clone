@@ -62,7 +62,8 @@ main()
 //Setting up the MongoDB session store
   
 const store = MongoStore.create({
-  mongoUrl: dbURL,
+  mongoUrl: process.env.ATLASDB_URL,
+  collectionName: "sessions",
   crypto: {
     secret: process.env.SECRET,
   },  
@@ -78,7 +79,7 @@ store.on("error", function (e) {
   store: store,
   secret: process.env.SECRET,
   resave:false,
-  saveUninitialized:true,
+  saveUninitialized:false,
   cookie:{
     expires:Date.now() + 7 * 24 * 60 * 60 * 1000,
     maxAge:7 * 24 * 60 * 60 * 1000,
