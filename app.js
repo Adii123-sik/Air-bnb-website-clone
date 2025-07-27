@@ -59,13 +59,13 @@ main()
     console.log(err);
   });
 
-// Setting up the MongoDB session store
+//Setting up the MongoDB session store
   
 const store = MongoStore.create({
   mongoUrl: dbURL,
   crypto: {
     secret: process.env.SECRET,
-  },
+  },  
   touchAfter: 24 * 3600, // time in seconds
 });
 
@@ -75,7 +75,7 @@ store.on("error", function (e) {
 
 // Session configuration for user authentication
   const sessionOption={
-  store:store,  
+  store: store,
   secret: process.env.SECRET,
   resave:false,
   saveUninitialized:true,
